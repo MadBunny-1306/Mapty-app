@@ -11,9 +11,12 @@ const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
 
+let map, mapEvent;
+
 // Geolocation API
 if (navigator.geolocation)
   navigator.geolocation.getCurrentPosition(
+    // getCurrentPosition() takes as arguments 2 callback functions, first is on success (when map loads), second is if map doesn't load
     function (position) {
       const { latitude } = position.coords;
       const { longitude } = position.coords;
@@ -24,7 +27,7 @@ if (navigator.geolocation)
       const coords = [latitude, longitude];
 
       // Leaflet map library
-      const map = L.map('map').setView(coords, 13);
+      map = L.map('map').setView(coords, 13);
 
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution:
@@ -32,28 +35,47 @@ if (navigator.geolocation)
       }).addTo(map);
 
       // instead of event listener (for adding maket on map every time is clicked on it) we use on() wich is method from Leaflet library
-      map.on('click', function (mapEvent) {
-        console.log(mapEvent);
-        const { lat, lng } = mapEvent.latlng;
-
-        L.marker([lat, lng])
-          .addTo(map)
-          .bindPopup(
-            L.popup({
-              maxWidth: 250,
-              minWidth: 100,
-              autoClose: false,
-              closeOnClick: false,
-              className: 'running-popup',
-            })
-          )
-          .setPopupContent('Workout')
-          .openPopup();
+      map.on('click', function (mapE) {
+        mapEvent = mapE;
+        form.classList.remove('hidden');
+        inputDistance.focus(); // better user experienece when we can immediately start typing, bc this input field will be in focus when form opens
       });
     },
+
     function () {
       alert('Could not get your position');
     }
   );
 
-// getCurrentPosition() takes as arguments 2 callback functions, first is on seccess (when map loads), second is if map doesn't load
+form.addEventListener('submit', function (e) {
+  e.preventDefault();
+
+  // Clear input fields
+  inputDistance.value =
+    inputDuration.value =
+    inputCadence.value =
+    inputElevation.value =
+      '';
+  // Display marker
+  console.log(mapEvent);
+  const { lat, lng } = mapEvent.latlng;
+  L.marker([lat, lng])
+    .addTo(map)
+    .bindPopup(
+      L.popup({
+        maxWidth: 250,
+        minWidth: 100,
+        autoClose: false,
+        closeOnClick: false,
+        className: 'running-popup',
+      })
+    )
+    .setPopupContent('Workout')
+    .openPopup();
+});
+
+// whener we change the value of select element an event is triggered
+inputType.addEventListener('change', function () {
+  inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
+  inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
+});

@@ -72,9 +72,14 @@ class App {
   #workouts = [];
 
   constructor() {
+    // Get user's position
     this._getPosition();
     form.addEventListener('submit', this._newWorkout.bind(this));
 
+    //Get data from local storage
+    this._getLocalStorage();
+
+    // Attach event handlers
     // whener we change the value of select element an event is triggered
     inputType.addEventListener('change', this._toggleElevationField);
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
@@ -110,7 +115,12 @@ class App {
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.#map);
 
+    // Handling clicks on map
     this.#map.on('click', this._showForm.bind(this)); // instead of event listener (for adding marker on map every time is clicked on it) we use on() wich is method from Leaflet library
+
+    this.#workouts.forEach(work => {
+      this._renderworkoutMarker(work);
+    });
   }
 
   _showForm(mapE) {
@@ -194,6 +204,9 @@ class App {
 
     // Hide form + clear input fields
     this._hideForm();
+
+    // Set local storage to all workouts
+    this._setLocaleStorage();
   }
 
   _renderworkoutMarker(workout) {
@@ -263,19 +276,38 @@ class App {
 
   _moveToPopup(e) {
     const workoutEl = e.target.closest('.workout');
-    console.log(workoutEl);
 
     if (!workoutEl) return;
 
     const workout = this.#workouts.find(
       work => work.id === workoutEl.dataset.id
     );
-    console.log(workout);
 
     this.#map.setView(workout.coords, this.#mapZoomLevel, {
       animate: true,
       pan: { duration: 1 },
     }); // to move into view popup we want, setView() is method of Liflet, first argument is coordinates, second is zoom level, and then we can pass in an object of options
+  }
+
+  _setLocaleStorage() {
+    localStorage.setItem('workouts', JSON.stringify(this.#workouts)); // JSON.stringify() converts any object to a string
+  }
+
+  _getLocalStorage() {
+    const data = JSON.parse(localStorage.getItem('workouts')); // JSON.parse() from string to object
+
+    if (!data) return;
+
+    this.#workouts = data;
+    this.#workouts.forEach(work => {
+      this._renderWorkout(work);
+    });
+    // object coming from local storage will not inherit all the methods that they did before, bc now they're just regular objects
+  }
+
+  reset() {
+    localStorage.removeItem('workouts');
+    location.reload();
   }
 }
 

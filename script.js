@@ -76,7 +76,7 @@ class App {
     this._getPosition();
     form.addEventListener('submit', this._newWorkout.bind(this));
 
-    //Get data from local storage
+    // Get data from local storage
     this._getLocalStorage();
 
     // Attach event handlers
@@ -116,7 +116,7 @@ class App {
     }).addTo(this.#map);
 
     // Handling clicks on map
-    this.#map.on('click', this._showForm.bind(this)); // instead of event listener (for adding marker on map every time is clicked on it) we use on() wich is method from Leaflet library
+    this.#map.on('click', this._showForm.bind(this)); // on() is method from Leaflet library
 
     this.#workouts.forEach(work => {
       this._renderworkoutMarker(work);
@@ -126,7 +126,7 @@ class App {
   _showForm(mapE) {
     this.#mapEvent = mapE;
     form.classList.remove('hidden');
-    inputDistance.focus(); // better user experienece when we can immediately start typing, bc this input field will be in focus when form opens
+    inputDistance.focus();
   }
 
   _hideForm() {

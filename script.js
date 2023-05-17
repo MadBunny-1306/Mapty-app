@@ -63,7 +63,7 @@ class Cycling extends Workout {
 }
 
 //////////////////////////////////
-// APPLOCATION ARCHITECTURE
+// APPLICATION ARCHITECTURE
 
 class App {
   #map;
@@ -82,7 +82,11 @@ class App {
     // Attach event handlers
     // whener we change the value of select element an event is triggered
     inputType.addEventListener('change', this._toggleElevationField);
+
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
+    document
+      .querySelector('.edit-btn')
+      .addEventListener('click', this._edit.bind(this));
   }
 
   _getPosition() {
@@ -209,6 +213,12 @@ class App {
     this._setLocaleStorage();
   }
 
+  _edit(e) {
+    e.preventDefault();
+    form.classList.remove('hidden');
+    inputDistance.focus();
+  }
+
   _renderworkoutMarker(workout) {
     L.marker(workout.coords)
       .addTo(this.#map)
@@ -233,6 +243,7 @@ class App {
       workout.id
     }">
     <h2 class="workout__title">${workout.description}</h2>
+    <button class="edit-btn"> edit</button>
     <div class="workout__details">
       <span class="workout__icon">${
         workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'

@@ -84,9 +84,9 @@ class App {
     inputType.addEventListener('change', this._toggleElevationField);
 
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
-    document
-      .querySelector('.edit-btn')
-      .addEventListener('click', this._edit.bind(this));
+    // document
+    //   .querySelector('.edit-btn')
+    //   .addEventListener('click', this._edit.bind(this));
   }
 
   _getPosition() {
@@ -170,12 +170,9 @@ class App {
     // If workout running, create running object
     if (type === 'running') {
       const cadence = +inputCadence.value;
-      // Check if data is valid
-      // using guard clause, we're checking for opposite of what we want, and if that is true we will return func immediatelly
+      // Check if data is valid - using guard clause, we're checking for opposite of what we want, and if that is true we will return func immediatelly
+
       if (
-        // !Number.isFinite(distance) ||
-        // !Number.isFinite(duration) ||
-        // !Number.isFinite(cadence)
         !validInputs(distance, duration, cadence) ||
         !allPositive(distance, duration, cadence)
       )
@@ -297,7 +294,7 @@ class App {
     this.#map.setView(workout.coords, this.#mapZoomLevel, {
       animate: true,
       pan: { duration: 1 },
-    }); // to move into view popup we want, setView() is method of Liflet, first argument is coordinates, second is zoom level, and then we can pass in an object of options
+    }); // to move into view popup we want, setView() is method of Leaflet, first argument is coordinates, second is zoom level, and then we can pass in an object of options
   }
 
   _setLocaleStorage() {

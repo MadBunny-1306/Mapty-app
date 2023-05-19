@@ -123,7 +123,7 @@ class App {
     this.#map.on('click', this._showForm.bind(this)); // on() is method from Leaflet library
 
     this.#workouts.forEach(work => {
-      this._renderworkoutMarker(work);
+      this._renderWorkoutMarker(work);
     });
   }
 
@@ -198,10 +198,13 @@ class App {
     this.#workouts.push(workout);
 
     // Render workout on map as marker
-    this._renderworkoutMarker(workout);
+    this._renderWorkoutMarker(workout);
 
     // Render workout on list
     this._renderWorkout(workout);
+
+    // Make values editable
+    this._edit(workout);
 
     // Hide form + clear input fields
     this._hideForm();
@@ -211,12 +214,14 @@ class App {
   }
 
   _edit(e) {
-    e.preventDefault();
-    form.classList.remove('hidden');
-    inputDistance.focus();
+    const editable = e.target.closest('.workout__value');
+    editable.addEventListener('click', function () {
+      editable.contentEditable = true;
+      editable.style.backgroundColor = '#dddbdb';
+    });
   }
 
-  _renderworkoutMarker(workout) {
+  _renderWorkoutMarker(workout) {
     L.marker(workout.coords)
       .addTo(this.#map)
       .bindPopup(
@@ -240,46 +245,48 @@ class App {
       workout.id
     }">
     <h2 class="workout__title">${workout.description}</h2>
-    <button class="edit-btn"> edit</button>
+  
     <div class="workout__details">
       <span class="workout__icon">${
         workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'
       }</span>
-      <span class="workout__value">${workout.distance}</span>
+      <p class="workout__value">${workout.distance}</p>
       <span class="workout__unit">km</span>
     </div>
     <div class="workout__details">
       <span class="workout__icon">⏱</span>
-      <span class="workout__value">${workout.duration}</span>
+      <p class="workout__value">${workout.duration}</p>
       <span class="workout__unit">min</span>
     </div>`;
 
     if (workout.type === 'running')
       html += `<div class="workout__details">
     <span class="workout__icon">⚡️</span>
-    <span class="workout__value">${workout.pace.toFixed(1)}</span>
+    <p class="workout__value">${workout.pace.toFixed(1)}</p>
     <span class="workout__unit">min/km</span>
   </div>
   <div class="workout__details">
     <span class="workout__icon">🦶🏼</span>
-    <span class="workout__value">${workout.cadence}</span>
+    <p class="workout__value">${workout.cadence}</p>
     <span class="workout__unit">spm</span>
   </div></li>`;
 
     if (workout.type === 'cycling')
       html += `<div class="workout__details">
     <span class="workout__icon">⚡️</span>
-    <span class="workout__value">${workout.speed.toFixed(1)}</span>
+    <p class="workout__value">${workout.speed.toFixed(1)}</p>
     <span class="workout__unit">km/h</span>
   </div>
   <div class="workout__details">
     <span class="workout__icon">⛰</span>
-    <span class="workout__value">${workout.elevationGain}</span>
+    <p class="workout__value">${workout.elevationGain}</p>
     <span class="workout__unit">m</span>
   </div>
 </li>`;
 
     form.insertAdjacentHTML('afterend', html);
+
+    // add event listener to workout__values to make them editable
   }
 
   _moveToPopup(e) {

@@ -204,21 +204,13 @@ class App {
     this._renderWorkout(workout);
 
     // Make values editable
-    this._edit(workout);
+    // this._edit(workout);
 
     // Hide form + clear input fields
     this._hideForm();
 
     // Set local storage to all workouts
     this._setLocaleStorage();
-  }
-
-  _edit(e) {
-    const editable = e.target.closest('.workout__value');
-    editable.addEventListener('click', function () {
-      editable.contentEditable = true;
-      editable.style.backgroundColor = '#dddbdb';
-    });
   }
 
   _renderWorkoutMarker(workout) {
@@ -245,6 +237,7 @@ class App {
       workout.id
     }">
     <h2 class="workout__title">${workout.description}</h2>
+    <button class="btn-edit"> edit</button>
   
     <div class="workout__details">
       <span class="workout__icon">${
@@ -285,9 +278,17 @@ class App {
 </li>`;
 
     form.insertAdjacentHTML('afterend', html);
-
-    // add event listener to workout__values to make them editable
+    document
+      .querySelector('.btn-edit')
+      .addEventListener('click', this._edit.bind(this));
   }
+
+  // _edit(e) {
+  //   const editableEl = e.target.closest('.workout__value');
+
+  //   editableEl.contentEditable = true;
+  //   editableEl.style.backgroundColor = '#dddbdb';
+  // }
 
   _moveToPopup(e) {
     const workoutEl = e.target.closest('.workout');

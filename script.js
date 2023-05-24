@@ -203,9 +203,6 @@ class App {
     // Render workout on list
     this._renderWorkout(workout);
 
-    // Make values editable
-    // this._edit(workout);
-
     // Hide form + clear input fields
     this._hideForm();
 
@@ -283,13 +280,6 @@ class App {
       .addEventListener('click', this._edit.bind(this));
   }
 
-  // _edit(e) {
-  //   const editableEl = e.target.closest('.workout__value');
-
-  //   editableEl.contentEditable = true;
-  //   editableEl.style.backgroundColor = '#dddbdb';
-  // }
-
   _moveToPopup(e) {
     const workoutEl = e.target.closest('.workout');
 
@@ -318,7 +308,7 @@ class App {
     this.#workouts.forEach(work => {
       this._renderWorkout(work);
     });
-    // object coming from local storage will not inherit all the methods that they did before, bc now they're just regular objects
+    // object comming from local storage will not inherit all the methods that they did before, bc now they're just regular objects
   }
 
   reset() {

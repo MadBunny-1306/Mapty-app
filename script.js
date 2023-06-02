@@ -295,6 +295,7 @@ class App {
     }); // to move into view popup we want, setView() is method of Leaflet, first argument is coordinates, second is zoom level, and then we can pass in an object of options
   }
 
+  // Working with local storage
   _setLocaleStorage() {
     localStorage.setItem('workouts', JSON.stringify(this.#workouts)); // JSON.stringify() converts any object to a string
   }

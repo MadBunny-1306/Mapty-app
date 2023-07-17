@@ -80,13 +80,10 @@ class App {
     this._getLocalStorage();
 
     // Attach event handlers
-    // whener we change the value of select element an event is triggered
+    // whene we change the value of select element an event is triggered
     inputType.addEventListener('change', this._toggleElevationField);
 
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
-    // document
-    //   .querySelector('.edit-btn')
-    //   .addEventListener('click', this._edit.bind(this));
   }
 
   _getPosition() {
